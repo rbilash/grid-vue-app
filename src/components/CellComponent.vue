@@ -7,6 +7,7 @@
 </template>
 
 <script>
+    import Vue from 'vue'
     import { mapGetters } from 'vuex'
     export default {
         name: "cell",
@@ -18,28 +19,32 @@
             col: {
                 type: Number,
                 required: true
-            },            
+            },
+            oval: {
+                type: Number,
+                requred: true
+            }            
         },
         data () {
             return {
                 check: false,
                 changed: false,
                 val: '',
-                originalValue: '',
             }
         },
-        mounted() {            
-            this.val = this.$store.getters.getCell(this.row, this.col).data;
-            this.originalValue = this.val;
+        mounted() {      
+            Vue.nextTick().then( () => {   
+                this.val = this.oval
+            })      
         },
         watch: {
             val: function(val) {                
-                this.changed = (this.originalValue != val);                
+                this.changed = (this.oval != val);                
             }
         },
         methods: {
             saveInput: function() {
-                console.log(`Input #${this.row}:${this.col} was modified from '${this.originalValue}' to '${this.val}'`);
+                console.log(`Input #${this.row}:${this.col} was modified from '${this.oval}' to '${this.val}'`);
             },
             validateInput: function() {
                 if (isNaN(this.val)) {                    

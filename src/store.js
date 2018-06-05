@@ -31,24 +31,21 @@ const mutations = {
         state.page.push(cell);
     },
     clearPastRows (state, count) {        
-        let rownums = [ ...new Set(state.page.map(value => value.row)) ];        
+        let rownums = [ ...new Set(state.page.map(value => value.row)) ];               
 
         if (rownums.length > count * 3) { //just delete when there are 3 screens
-            rownums.splice(count);
-        }       
-        
-            
-        let newpage = [];
-        for (let r = 0; r < rownums.length; r++) { 
-            let index = -1;        
-            let row = rownums[r];
-            
-            do {
-                index = state.page.findIndex(item => item.row == row);                            
-                if(index !== -1) state.page.splice(index, 1);    
+            rownums.splice(count);    
+            for (let r = 0; r < rownums.length; r++) { 
+                let index = -1;        
+                let row = rownums[r];
+                
+                do {
+                    index = state.page.findIndex(item => item.row == row);                            
+                    if(index !== -1) state.page.splice(index, 1);    
+                }
+                while (index !== -1)
+                
             }
-            while (index !== -1)
-            
         }
     }
     
