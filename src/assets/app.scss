@@ -1,0 +1,56 @@
+*, ::after, ::before {
+    box-sizing: border-box;
+}
+
+body {
+    padding: 0px;
+    margin: 0px;
+}
+
+
+
+.row {
+    padding: 0;
+    margin: 0;
+
+    display: flex;
+    flex-direction: row;        
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    .rownum, .empty {
+        flex: 0 0 60px;
+        font-size: 10px;
+        height: 50px;
+        border: solid 1px #dedede;
+        margin: 3px;
+        padding: 15px;    
+        background-color: #dedede;
+        justify-content: flex-center;
+        text-align: center;
+    }
+    .colnum {
+        flex: 0 0 250px;
+        height: 50px;
+        border: solid 1px #dedede;
+        background-color: #dedede;
+        margin: 3px;
+        padding: 10px;    
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: flex-start;    
+    }
+
+    .cell {
+        flex: 0 0 250px;
+        height: 50px;
+        border: solid 1px #dedede;
+        margin: 3px;
+        padding: 10px;    
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: flex-start;    
+    }
+        
+}
