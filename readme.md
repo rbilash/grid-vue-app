@@ -5,3 +5,4 @@ A part of test task including:
 + Dynamic loading of rows on scroll
 + Vuex state management
 + Component based implementation
++ Webpack configuration including hot reload
