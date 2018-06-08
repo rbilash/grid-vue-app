@@ -17,6 +17,6 @@
 <style lang="scss" scoped>
 .headrow {
     background: white;
-    position: sticky; top:0;
+    //position: fixed; top:0;
 }
 </style>

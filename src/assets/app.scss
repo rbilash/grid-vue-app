@@ -5,6 +5,7 @@
 body {
     padding: 0px;
     margin: 0px;
+
 }
 
 
@@ -27,6 +28,7 @@ body {
         background-color: #dedede;
         justify-content: flex-center;
         text-align: center;
+        position:sticky;left:0;
     }
     .colnum {
         flex: 0 0 250px;
@@ -42,9 +44,9 @@ body {
     }
 
     .cell {
-        flex: 0 0 250px;
         height: 50px;
-        border: solid 1px #dedede;
+        border-bottom: solid 1px #dedede;
+        border-right: solid 1px #dedede;
         margin: 3px;
         padding: 10px;    
         display: flex;

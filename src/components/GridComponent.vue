@@ -1,7 +1,7 @@
 <template>
     <div class="wrapper" :style="{ width: docWidth + 'px', height: docHeight + 'px' }">
         <div class="grid">
-            <headrow :colnum="colNumbers" />
+            <!-- headrow :colnum="colNumbers" -->
             <row v-for="r in rowNumbers" :key="r" :rownum="r">
                 <cell v-for="c in colNumbers" :key="c" :row="r" :col="c" :oval="cellValue(r,c)"/>
             </row>
@@ -10,7 +10,8 @@
 </template>
 
 <script>
-
+    const cellHeight = 50;
+    const cellWidth = 250;
     import _ from 'lodash';
     import Row from './RowComponent.vue';
     import Cell from './CellComponent.vue';
@@ -38,6 +39,9 @@
                 leftOffset: 0,
                 topOffset: 0,
 
+                paddingTop: 0,
+                paddingLeft: 0,
+
                 bottom: false,
                 right: false,
                 grid: {
@@ -56,8 +60,11 @@
                 let {left,top,width,height}  = this.$el.getBoundingClientRect();
                 // fix for 0-scroll event
                 if (width && height) {                     
-                    this.leftOffset = Math.abs(Math.floor(left / 250));                    
-                    this.topOffset = Math.abs(Math.floor(top / 50));
+                    this.leftOffset = Math.abs(Math.ceil(left / 250));                    
+                    this.topOffset = Math.abs(Math.ceil(top / 50));
+                    this.paddingTop = Math.abs(top);
+                    this.paddingLeft = left;
+                    
                     //this.dataPayload();
                 }
             },
@@ -77,12 +84,10 @@
 
         },
         computed: {
-            rowNumbers: function() {                
-                console.log("rownum:", this.topOffset)                               
+            rowNumbers: function() {                                           
                 return _.range(this.topOffset, this.topOffset + this.visibleRows)
             },
-            colNumbers: function() { 
-                console.log("colnum:", this.leftOffset)                               
+            colNumbers: function() {                                
                 return _.range(this.leftOffset, this.leftOffset + this.visibleCols)
             }            
             
@@ -95,8 +100,8 @@
             this.winHeight = document.documentElement.clientHeight
             this.winWidth = document.documentElement.clientWidth
             
-            this.visibleCols = Math.floor((this.winWidth - 50) / 250); //-50 because of rom numbers column width
-            this.visibleRows = Math.floor((this.winHeight - 50) / 50); // -50 because of row width
+            this.visibleCols = Math.ceil((this.winWidth - 50) / 250); //-50 because of rom numbers column width
+            this.visibleRows = Math.ceil((this.winHeight - 50) / 50); // -50 because of row width
             
             window.addEventListener('scroll', this.loadVisible);
 
@@ -112,7 +117,8 @@
     flex-direction: column;
     flex-wrap: nowrap;
     justify-content: flex-start;
-    position: fixed; top:0;
+    //position: fixed; top:0;
+    position: relative;
     
 }
 .wrapper {
