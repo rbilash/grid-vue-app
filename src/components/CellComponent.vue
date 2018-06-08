@@ -1,35 +1,23 @@
 <template>
-   <div class="cell">
-       <input type="checkbox" v-model="check">
-       <input type="text" v-model="val" :disabled="check" @keyup="validateInput">
-       <button type="button" v-show="!check && changed" @click="saveInput">Save</button>
-   </div>
+    <div class="cell">
+        <input type="checkbox" v-model="check">
+        <input type="text" v-model="val" :disabled="check" @keyup="validateInput">
+    </div>
 </template>
 
 <script>
-    import Vue from 'vue'
-    import { mapGetters } from 'vuex'
+
+    import Vue from 'vue';
+
     export default {
         name: "cell",
-        props: {
-            row: {
-                type: Number,
-                required: true
-            },
-            col: {
-                type: Number,
-                required: true
-            },
-            oval: {
-                type: Number,
-                requred: true
-            }            
-        },
+        props: ['row', 'col', 'oval'],
         data () {
             return {
                 check: false,
                 changed: false,
                 val: '',
+                visible: false,
             }
         },
         mounted() {      
@@ -43,9 +31,6 @@
             }
         },
         methods: {
-            saveInput: function() {
-                console.log(`Input #${this.row}:${this.col} was modified from '${this.oval}' to '${this.val}'`);
-            },
             validateInput: function() {
                 if (isNaN(this.val)) {                    
                     this.val = this.val.slice(0, -1);
@@ -53,11 +38,6 @@
             }
         },
         computed: {
-            ...mapGetters([
-                'getRowNums',
-                'getColNums',
-                'getPage',
-            ])
         }
 
     }

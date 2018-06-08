@@ -1,36 +1,22 @@
 <template>
     <div class="row headrow">        
         <div class="empty"></div>
-        <div class="colnum" v-for="(c,i) in colnum" :key="i">{{ i }}</div>
+        <div class="colnum" v-for="c in colnum" :key="c">{{ c }}</div>
     </div>
    
 </template>
 
 <script>
 
-    import Cell from './CellComponent.vue';
-
     export default {
         name: 'headrow',
-        props: {
-            'colnum': {
-                type: Array,
-                required: true
-            }, 
-        },
-        components: {
-            Cell,
-        },
-        data () {
-            return {
-                cells: 10,
-            }            
-        }
+        props: ['colnum'],
     }
 </script>
 
 <style lang="scss" scoped>
 .headrow {
     background: white;
+    position: sticky; top:0;
 }
 </style>
