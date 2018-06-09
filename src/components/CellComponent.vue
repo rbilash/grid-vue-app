@@ -8,7 +8,7 @@
 <script>
 
     import Vue from 'vue';
-    const cellwidth = 250;
+    const cellwidth = 200;
     const runnerWidth = 60;
     export default {
         name: "cell",
@@ -51,7 +51,7 @@
 .cell {
     position: absolute;
     top: 0; left: 0;  
-    width: 250px;  
+    width: 200px;  
 }
 
 input, button { 
