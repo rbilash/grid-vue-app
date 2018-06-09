@@ -10,6 +10,8 @@
     import Vue from 'vue';
     const cellwidth = 200;
     const runnerWidth = 60;
+
+    import { mapActions } from 'vuex'
     export default {
         name: "cell",
         props: ['row', 'col', 'oval'],
@@ -21,22 +23,32 @@
                 visible: false,
             }
         },
-        mounted() {      
-            Vue.nextTick().then( () => {   
-                this.val = this.oval
-            })      
+        mounted() {  
+            this.val = this.oval    
         },
         watch: {
-            val: function(val) {                
-                this.changed = (this.oval != val);                
+            val: function(val) {             
+                this.changed = (this.oval != val); 
+            },
+            changed: function(val) {
+                if (val) { 
+                    this.addCell({row: this.row, col: this.col, data: this.val})
+                } 
+                else {
+                    this.removeCell({row: this.row, col: this.col})
+                }
             }
         },
         methods: {
+            ...mapActions([
+                'addCell',
+                'removeCell',
+            ]),
             validateInput: function() {
                 if (isNaN(this.val)) {                    
-                    this.val = this.val.slice(0, -1);
+                    this.val = this.oval;
                 }
-            }
+            },
         },
         computed: {
             offsetLeft: function() {

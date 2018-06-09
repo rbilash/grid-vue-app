@@ -6,49 +6,37 @@ Vue.use(Vuex)
 
 // initial state object
 const state = {
-    page: [],
+    changed: [],
 }
 
 // define getters that can be accessed to retreive data
 const getters = {
-    getPage: state => {
-        return state.page
-    },
-    getCell: (state) => (row,col) => {
-        return state.page.find(cell => cell.row == row && cell.col == col);
-    },    
-    getRowNums: state => {
-        return [ ...new Set(state.page.map(value => value.row)) ];
-    },
-    getColNums: state => {
-        return [ ...new Set(state.page.map(value => value.col)) ];
-    }            
+    countChanged: state => {
+        return state.changed.length
+    }
 }
 
 // define mutations that can be applied to our state
 const mutations = {
     addCell (state, cell) {
-        state.page.push(cell);
-    },
-    clearPastRows (state, count) {        
-        let rownums = [ ...new Set(state.page.map(value => value.row)) ];               
-
-        if (rownums.length > count * 3) { //just delete when there are 3 screens
-            rownums.splice(count);    
-            for (let r = 0; r < rownums.length; r++) { 
-                let index = -1;        
-                let row = rownums[r];
-                
-                do {
-                    index = state.page.findIndex(item => item.row == row);                            
-                    if(index !== -1) state.page.splice(index, 1);    
-                }
-                while (index !== -1)
-                
-            }
+        let {row,col} = cell;
+        let index = state.changed.findIndex((c) => c.row == row && c.col == col)
+        if (index > -1) {
+            state.changed[index].data = cell.data
         }
-    }
-    
+        state.changed.push(cell);
+    },
+    removeCell (state, cell) {
+        let {row,col} = cell;
+        let index = state.changed.findIndex((c) => c.row == row && c.col == col)
+        if (index > -1) {
+            state.changed.splice(index,1)
+        }
+
+    },    
+    clearCells (state) {
+        state.changed = [];
+    }    
 }
 
 // define actions that can be called to perform mutations
@@ -56,8 +44,17 @@ const actions = {
     addCell (context, cell) {
         context.commit('addCell', cell)
     },
-    clearPastRows (context, count) {
-        context.commit('clearPastRows', count)
+    removeCell (context, cell) {
+        context.commit('removeCell', cell)
+    },    
+    clearCells (context) {
+        context.commit('clearCells')
+    },
+    saveCells (context) {
+        state.changed.forEach((el) => {
+            console.log(`Input #${el.row}:${el.col} value: '${el.data}'`)            
+        });
+        context.commit('clearCells')
     }            
 }
 

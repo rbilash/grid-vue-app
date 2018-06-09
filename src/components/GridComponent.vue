@@ -6,6 +6,7 @@
                 <cell v-for="c in colNumbers" :key="c" :row="r" :col="c" :oval="cellValue(r,c)"/>
             </row>
         </div>
+        <div class="footer" v-show="countChanged"><button @click="saveCells">Save</button></div>
     </div>
 </template>
 
@@ -13,6 +14,7 @@
     const cellHeight = 50;
     const cellWidth = 200;
     import _ from 'lodash';
+    import { mapGetters,mapActions } from 'vuex'
     import Row from './RowComponent.vue';
     import Cell from './CellComponent.vue';
     import Headrow from './HeadrowComponent.vue';
@@ -53,9 +55,9 @@
             }            
         },
         methods: {
-            saveInput: function() {
-                //console.log(`Input #${this.row}:${this.col} value: '${this.val}'`);
-            },            
+            ...mapActions([
+                'saveCells',
+            ]),            
             loadVisible: function() {
                 let {left,top,width,height}  = this.$el.getBoundingClientRect();
                 // fix for 0-scroll event
@@ -65,7 +67,7 @@
                     this.paddingTop = Math.abs(top);
                     this.paddingLeft = left;
                     
-                    //this.dataPayload();
+                    this.dataPayload();
                 }
             },
             dataPayload: function() {
@@ -77,13 +79,17 @@
                         });
                     }
                 } 
+                this.page = [...newpage];
             },
             cellValue: function(row,col) {
-                return this.page.find(cell => cell.row == row && cell.col == col);
-            },    
+                return this.page.find(cell => cell.row == row && cell.col == col).data;
+            }
 
         },
         computed: {
+            ...mapGetters([
+                'countChanged',
+            ]),            
             rowNumbers: function() {                                           
                 return _.range(this.topOffset, this.topOffset + this.visibleRows)
             },
@@ -105,7 +111,7 @@
             
             window.addEventListener('scroll', this.loadVisible);
 
-            //this.dataPayload();
+            this.dataPayload();
             
         }        
     }
@@ -125,5 +131,10 @@
 .wrapper {
     display: block;
     background: white;
+}
+.footer {
+    position: fixed; bottom: 0; width: 100%; background: white;
+    text-align: right; padding: 15px;
+    box-shadow: 0 -3px 15px rgba(0, 0, 0, 0.3)
 }
 </style>
