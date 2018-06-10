@@ -28,7 +28,7 @@
         },
         watch: {
             val: function(val) {             
-                this.changed = (this.oval != val); 
+                this.changed = (this.oval != val);
             },
             changed: function(val) {
                 if (val) { 
@@ -45,8 +45,8 @@
                 'removeCell',
             ]),
             validateInput: function() {
-                if (isNaN(this.val)) {                    
-                    this.val = this.oval;
+                if (isNaN(this.val)) {   
+                    this.val = this.val.replace(/\D/g,'');
                 }
             },
         },

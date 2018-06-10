@@ -13,6 +13,8 @@
 <script>
     const cellHeight = 50;
     const cellWidth = 200;
+    const rows = 40000;
+    const cols = 40000;
     import _ from 'lodash';
     import { mapGetters,mapActions } from 'vuex'
     import Row from './RowComponent.vue';
@@ -44,20 +46,19 @@
                 paddingTop: 0,
                 paddingLeft: 0,
 
-                bottom: false,
-                right: false,
-                grid: {
-                    row: 0,
-                    col: 0,
-                    rows: 10,
-                    cols: 10,                    
-                },
             }            
         },
         methods: {
             ...mapActions([
                 'saveCells',
-            ]),            
+            ]),    
+            calcDimensions: function() {
+                this.winHeight = document.documentElement.clientHeight
+                this.winWidth = document.documentElement.clientWidth           
+                this.visibleCols = Math.ceil((this.winWidth - 50) / cellWidth); //-50 because of rom numbers column width
+                this.visibleRows = Math.ceil((this.winHeight - 50) / cellHeight); // -50 because of header row width
+                window.scrollTo(window.scrollX, window.scrollY - 1);
+            },        
             loadVisible: function() {
                 let {left,top,width,height}  = this.$el.getBoundingClientRect();
                 // fix for 0-scroll event
@@ -75,7 +76,7 @@
                 for (let r = this.topOffset; r < this.topOffset + this.visibleRows; r++) {                
                     for (let c = this.leftOffset; c < this.leftOffset + this.visibleCols; c++) {
                         newpage.push({
-                            row: r, col: c, data: Math.floor((Math.random() * 100) + 1)
+                            row: r, col: c, data: String(Math.floor((Math.random() * 100) + 1))
                         });
                     }
                 } 
@@ -91,25 +92,28 @@
                 'countChanged',
             ]),            
             rowNumbers: function() {                                           
-                return _.range(this.topOffset, this.topOffset + this.visibleRows)
+                let limit = this.topOffset + this.visibleRows;
+                return _.range(this.topOffset, limit > rows ? rows : limit)
             },
-            colNumbers: function() {                                
-                return _.range(this.leftOffset, this.leftOffset + this.visibleCols)
+            colNumbers: function() {                          
+                let limit = this.leftOffset + this.visibleCols;      
+                return _.range(this.leftOffset, limit > cols ? cols : limit)
             }            
             
         },
         mounted() {
 
-            this.docWidth = 40000 * 200; 
-            this.docHeight = 40000 * 50;
+            this.docWidth = cols * cellWidth; 
+            this.docHeight = rows * cellHeight;
 
             this.winHeight = document.documentElement.clientHeight
             this.winWidth = document.documentElement.clientWidth
             
-            this.visibleCols = Math.ceil((this.winWidth - 50) / 200); //-50 because of rom numbers column width
-            this.visibleRows = Math.ceil((this.winHeight - 50) / 50); // -50 because of row width
+            this.visibleCols = Math.ceil((this.winWidth - 50) / cellWidth); //-50 because of rom numbers column width
+            this.visibleRows = Math.ceil((this.winHeight - 50) / cellHeight); // -50 because of header row width
             
             window.addEventListener('scroll', this.loadVisible);
+            window.addEventListener('resize', this.calcDimensions);
 
             this.dataPayload();
             
